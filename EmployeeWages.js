@@ -1,40 +1,20 @@
-const IS_PART_TIME = 1;
-const IS_FULL_TIME = 2;
-const PART_TIME_HOURS = 4;
-const FULL_TIME_HOURS = 8;
-const WAGE_PER_HOUR = 20;
-const MAX_WORKING_DAYS = 20;
-const MAX_WORKING_HOURS = 160;
-
-function getWorkingHours(empCheck) {
-    switch (empCheck) {
-        case IS_PART_TIME:
-            return PART_TIME_HOURS;
-        case IS_FULL_TIME:
-            return FULL_TIME_HOURS;
-        default:
-            return 0;
+class EmployeePayroll {
+    constructor(id, name, salary) {
+        this.id = id;
+        this.name = name;
+        this.salary = salary;
     }
+
+    getDetails = () => `ID: ${this.id}, Name: ${this.name}, Salary: ₹${this.salary}`;
 }
 
-let totalEmpHrs = 0;
-let totalWorkingDays = 0;
-let empDailyRecords = []; // Array of objects to store day-wise details
+// Creating Employee Payroll Data
+let emp1 = new EmployeePayroll(101, "Amit Sharma", 50000);
+let emp2 = new EmployeePayroll(102, "Priya Mehta", 60000);
+let emp3 = new EmployeePayroll(103, "Rahul Verma", 55000);
 
-while (totalEmpHrs < MAX_WORKING_HOURS && totalWorkingDays < MAX_WORKING_DAYS) {
-    totalWorkingDays++;
-    let empCheck = Math.floor(Math.random() * 10) % 3;
-    let workHours = getWorkingHours(empCheck);
-    totalEmpHrs += workHours;
-    let dailyWage = workHours * WAGE_PER_HOUR;
+// Storing employees in an array
+let employees = [emp1, emp2, emp3];
 
-    // Storing in an object and adding to array
-    empDailyRecords.push({
-        day: totalWorkingDays,
-        hoursWorked: workHours,
-        wageEarned: dailyWage
-    });
-}
-
-// Display stored objects
-console.log("Employee Work Records:", empDailyRecords);
+// Display Employee Details
+employees.forEach(emp => console.log(emp.getDetails()));
