@@ -19,7 +19,8 @@ function getWorkingHours(empCheck) {
 
 let totalEmpHrs = 0;
 let totalWorkingDays = 0;
-let dailyWageMap = new Map(); // Map to store day-wise wages
+let dailyWageMap = new Map(); // Store Day → Wage
+let dailyHourMap = new Map(); // Store Day → Hours
 
 while (totalEmpHrs < MAX_WORKING_HOURS && totalWorkingDays < MAX_WORKING_DAYS) {
     totalWorkingDays++;
@@ -28,13 +29,28 @@ while (totalEmpHrs < MAX_WORKING_HOURS && totalWorkingDays < MAX_WORKING_DAYS) {
     totalEmpHrs += workHours;
     let dailyWage = workHours * WAGE_PER_HOUR;
     
-    dailyWageMap.set(totalWorkingDays, dailyWage); // Store in Map (Day -> Wage)
+    dailyWageMap.set(totalWorkingDays, dailyWage);
+    dailyHourMap.set(totalWorkingDays, workHours);
 }
 
-// Compute total wage using reduce on Map values
+// a. Calculate Total Wage & Total Hours using Arrow Function & Reduce
 let totalWage = [...dailyWageMap.values()].reduce((total, wage) => total + wage, 0);
+let totalHours = [...dailyHourMap.values()].reduce((total, hours) => total + hours, 0);
+console.log(`Total Working Days: ${totalWorkingDays} | Total Hours: ${totalHours} | Total Wage: ₹${totalWage}`);
 
-console.log("Total Working Days: " + totalWorkingDays + 
-            " | Total Hrs: " + totalEmpHrs + 
-            " | Total Wage: ₹" + totalWage);
-console.log("Day-wise Wages: ", dailyWageMap);
+// b. Categorize Full Working Days, Part Working Days, and No Working Days
+let fullWorkingDays = [...dailyHourMap.entries()]
+    .filter(([day, hours]) => hours === FULL_TIME_HOURS)
+    .map(([day, hours]) => `Day ${day}`);
+
+let partWorkingDays = [...dailyHourMap.entries()]
+    .filter(([day, hours]) => hours === PART_TIME_HOURS)
+    .map(([day, hours]) => `Day ${day}`);
+
+let noWorkingDays = [...dailyHourMap.entries()]
+    .filter(([day, hours]) => hours === 0)
+    .map(([day, hours]) => `Day ${day}`);
+
+console.log("Full Working Days:", fullWorkingDays);
+console.log("Part Working Days:", partWorkingDays);
+console.log("No Working Days:", noWorkingDays);
