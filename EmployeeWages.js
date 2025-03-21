@@ -19,7 +19,7 @@ function getWorkingHours(empCheck) {
 
 let totalEmpHrs = 0;
 let totalWorkingDays = 0;
-let empDailyRecords = []; // Array of objects to store day-wise details
+let empDailyRecords = []; // Array to store daily records
 
 while (totalEmpHrs < MAX_WORKING_HOURS && totalWorkingDays < MAX_WORKING_DAYS) {
     totalWorkingDays++;
@@ -28,7 +28,6 @@ while (totalEmpHrs < MAX_WORKING_HOURS && totalWorkingDays < MAX_WORKING_DAYS) {
     totalEmpHrs += workHours;
     let dailyWage = workHours * WAGE_PER_HOUR;
 
-    // Storing in an object and adding to array
     empDailyRecords.push({
         day: totalWorkingDays,
         hoursWorked: workHours,
@@ -36,5 +35,25 @@ while (totalEmpHrs < MAX_WORKING_HOURS && totalWorkingDays < MAX_WORKING_DAYS) {
     });
 }
 
-// Display stored objects
-console.log("Employee Work Records:", empDailyRecords);
+// a. Calculate Total Wage & Total Hours using Arrow Functions & Reduce
+let totalWage = empDailyRecords.reduce((total, record) => total + record.wageEarned, 0);
+let totalHours = empDailyRecords.reduce((total, record) => total + record.hoursWorked, 0);
+console.log(`Total Working Days: ${totalWorkingDays} | Total Hours: ${totalHours} | Total Wage: ₹${totalWage}`);
+
+// b. Show Full Working Days using forEach
+console.log("Full Working Days:");
+empDailyRecords.forEach(record => {
+    if (record.hoursWorked === FULL_TIME_HOURS) console.log(`Day ${record.day}`);
+});
+
+// c. Show Part Working Days using Map by reducing to String Array
+let partWorkingDays = empDailyRecords
+    .filter(record => record.hoursWorked === PART_TIME_HOURS)
+    .map(record => `Day ${record.day}`);
+console.log("Part Working Days:", partWorkingDays);
+
+// d. Show No Working Days using Map
+let noWorkingDays = empDailyRecords
+    .filter(record => record.hoursWorked === 0)
+    .map(record => `Day ${record.day}`);
+console.log("No Working Days:", noWorkingDays);
